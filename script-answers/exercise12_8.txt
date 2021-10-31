@@ -1,0 +1,87 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20211031164747
+Username: DESKTOP-8TV6OAD\aarni
+RunAs User: DESKTOP-8TV6OAD\aarni
+Configuration Name: 
+Machine: DESKTOP-8TV6OAD (Microsoft Windows NT 10.0.19043.0)
+Host Application: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+Process ID: 4364
+PSVersion: 5.1.19041.1237
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.19041.1237
+BuildVersion: 10.0.19041.1237
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is C:\Users\aarni\fullstackopen\Containers-part12\script-answers\exercise12_8.txt
+PS C:\Users\aarni> docker container ls
+CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS          PORTS                     NAMES
+1e105d57f272   nginx     "/docker-entrypoint.…"   46 minutes ago   Up 46 minutes   0.0.0.0:8080->80/tcp      competent_aryabhata
+5bb0afea1e0d   mongo     "docker-entrypoint.s…"   3 hours ago      Up 3 hours      0.0.0.0:3456->27017/tcp   todo-backend-mongo-1
+PS C:\Users\aarni> docker exec -it todo-backend-mongo-1 bash
+root@5bb0afea1e0d:/# mongo -u root -p example
+MongoDB shell version v5.0.3
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("10c086c4-3c84-4808-9ee2-35ef1f77a623") }
+MongoDB server version: 5.0.3
+================
+Warning: the "mongo" shell has been superseded by "mongosh",
+which delivers improved usability and compatibility.The "mongo" shell has been deprecated and will be removed in
+an upcoming release.
+We recommend you begin using "mongosh".
+For installation instructions, see
+https://docs.mongodb.com/mongodb-shell/install/
+================
+---
+The server generated these startup warnings when booting:
+        2021-10-31T11:39:33.344+00:00: Using the XFS filesystem is strongly recommended with the WiredTiger storage engine. See http://d
+ochub.mongodb.org/core/prodnotes-filesystem
+        2021-10-31T11:39:34.064+00:00: /sys/kernel/mm/transparent_hugepage/enabled is 'always'. We suggest setting it to 'never'
+---
+---
+        Enable MongoDB's free cloud-based monitoring service, which will then receive and display
+        metrics about your deployment (disk utilization, CPU, operation statistics, etc).
+
+        The monitoring data will be available on a MongoDB website with a unique URL accessible to you
+        and anyone you share the URL with. MongoDB may use this information to make product
+        improvements and to suggest MongoDB products and deployment options to you.
+
+        To enable free monitoring, run the following command: db.enableFreeMonitoring()
+        To permanently disable this reminder, run the following command: db.disableFreeMonitoring()
+---
+> shpw dbs
+uncaught exception: SyntaxError: unexpected token: identifier :
+@(shell):1:5
+> show dbs
+admin         0.000GB
+config        0.000GB
+local         0.000GB
+the_database  0.000GB
+> use the_database
+switched to db the_database
+> show collections
+todos
+> db.todos.find({})
+{ "_id" : ObjectId("617e8074d1f614e247851fb5"), "text" : "Write code", "done" : true }
+{ "_id" : ObjectId("617e8074d1f614e247851fb6"), "text" : "Learn about containers", "done" : false }
+> db.todos.insertOne({ text: "Increase the number of tools in my tootbelt", done: false })
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("617eaff7011c8b0310f35785")
+}
+> db.todos.find({})
+{ "_id" : ObjectId("617e8074d1f614e247851fb5"), "text" : "Write code", "done" : true }
+{ "_id" : ObjectId("617e8074d1f614e247851fb6"), "text" : "Learn about containers", "done" : false }
+{ "_id" : ObjectId("617eaff7011c8b0310f35785"), "text" : "Increase the number of tools in my tootbelt", "done" : false }
+> ^C
+bye
+root@5bb0afea1e0d:/# exit
+exit
+PS C:\Users\aarni> Stop-Transcript
+**********************
+Windows PowerShell transcript end
+End time: 20211031170405
+**********************
