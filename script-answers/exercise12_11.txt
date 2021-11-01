@@ -1,0 +1,49 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20211101153404
+Username: DESKTOP-8TV6OAD\aarni
+RunAs User: DESKTOP-8TV6OAD\aarni
+Configuration Name: 
+Machine: DESKTOP-8TV6OAD (Microsoft Windows NT 10.0.19043.0)
+Host Application: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+Process ID: 35764
+PSVersion: 5.1.19041.1237
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.19041.1237
+BuildVersion: 10.0.19041.1237
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is C:\Users\aarni\fullstackopen\Containers-part12\script-answers\exercise12_11.txt
+PS C:\Users\aarni\fullstackopen> docker container ls
+CONTAINER ID   IMAGE          COMMAND                  CREATED        STATUS          PORTS                     NAMES
+9105edd4997d   redis:alpine   "docker-entrypoint.s…"   2 hours ago    Up 11 minutes   0.0.0.0:6379->6379/tcp    todo-backend-redis-1
+b860cba63450   mongo          "docker-entrypoint.s…"   6 hours ago    Up 11 minutes   0.0.0.0:3456->27017/tcp   todo-backend-mongo-1
+1e105d57f272   nginx          "/docker-entrypoint.…"   24 hours ago   Up 24 hours     0.0.0.0:8080->80/tcp      competent_aryabhata
+PS C:\Users\aarni\fullstackopen> docker exec -it todo-backend-redis-1 sh
+/data # redis-cli
+127.0.0.1:6379> KEYS *todos*
+1) "todos"
+127.0.0.1:6379> KEYS *eitoimi*
+(empty array)
+127.0.0.1:6379> GET todos
+"1"
+127.0.0.1:6379> SET todos "9001"
+OK
+127.0.0.1:6379> GET todos
+"9001"
+127.0.0.1:6379> GET todos
+"9002"
+127.0.0.1:6379> DEL todos
+(integer) 1
+127.0.0.1:6379> GET todos
+(nil)
+127.0.0.1:6379> exit
+/data # exit
+PS C:\Users\aarni\fullstackopen> Stop-Transcript
+**********************
+Windows PowerShell transcript end
+End time: 20211101155230
+**********************
