@@ -1,0 +1,37 @@
+services:
+  app:
+    image: phonebook-frontend-dev
+    build:
+      context: ./phonebook-frontend # The context will pick this directory as the "build context"
+      dockerfile: dev.Dockerfile # This will simply tell which dockerfile to read
+    volumes:
+      - ./phonebook-frontend:/usr/src/app # The path can be relative, so ./ is enough to say "the same location as the docker-compose.yml"
+    ports:
+      - 3000:3000
+    environment:
+      - REACT_APP_BACKEND_URL=//localhost:3001/api/persons
+    container_name: phonebook-frontend-dev # This will name the container hello-front-dev
+  nginx:
+    image: nginx:1.20.1
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8080:80
+    container_name: reverse-proxy
+  server:
+    image: phonebook-backend-dev
+    # When we start the command "docker-compose ... up", we will let this file
+    # build the image with "dev.Dockerfile" from the "./phonebook-backend" directory
+    # as the same way as we did for building the frontend on previous task. Also
+    # we making sure that all the server content goes into inside "phonebook-backend"
+    # directory, which means once we run this file, then we will have 2 seperate
+    # folders for frontend and backend.
+    build:
+      context: ./phonebook-backend
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./phonebook-backend:/usr/src/app
+    ports:
+      - 3001:3001
+  debug-helper:
+    image: busybox
