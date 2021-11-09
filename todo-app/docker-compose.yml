@@ -1,0 +1,59 @@
+services:
+  app:
+    image: todo-dashboard
+    build:
+      context: ./todo-frontend # The context will pick this directory as the "build context"
+      dockerfile: Dockerfile # This will simply tell which dockerfile to read
+    volumes:
+      - ./todo-frontend:/usr/src/app # The path can be relative, so ./ is enough to say "the same location as the docker-compose.yml"
+    ports:
+      - 3000:80
+    environment:
+      - REACT_APP_BACKEND_URL=//localhost:3001
+    container_name: todo-dashboard # This will name the container hello-front-dev
+  nginx:
+    image: nginx:1.20.1
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8080:80
+    container_name: reverse-proxy
+  mongo:
+    image: mongo
+    ports:
+     - 3456:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: the_database
+    volumes:
+      - ./todo-backend/mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+      - ./todo-backend/mongo_data:/data/db
+  redis:
+    image: redis:alpine
+    ports:
+      - 6379:6379
+    command: ['redis-server', '--appendonly', 'yes']
+    volumes:
+      - ./todo-backend/redis_data:/data
+  server:
+    image: todo-backend
+    # When we start the command "docker-compose ... up", we will let this file
+    # build the image with "dev.Dockerfile" from the "./todo-backend" directory
+    # as the same way as we did for building the frontend on previous task. Also
+    # we making sure that all the server content goes into inside "todo-backend"
+    # directory, which means once we run this file, then we will have 2 seperate
+    # folders for frontend and backend.
+    build:
+      context: ./todo-backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./todo-backend:/usr/src/app
+    ports:
+      - 3001:3001
+    environment:
+      - REDIS_URL=redis
+      - REDIS_PORT=6379
+      - MONGO_URL=mongodb://the_username:the_password@mongo:27017/the_database
+  debug-helper:
+    image: busybox
